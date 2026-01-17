@@ -5,8 +5,20 @@ import { cn } from "./lib/utils"
 
 export default function Home() {
   const [stage, setStage] = useState<"idle" | "breaking" | "broken">("idle")
+  const [idleFrame, setIdleFrame] = useState(0)
   const [crackFrame, setCrackFrame] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
+
+  // Idle animation - slowly cycle through first few frames
+  useEffect(() => {
+    if (stage !== "idle") return
+
+    const interval = setInterval(() => {
+      setIdleFrame((prev) => (prev + 1) % 3)
+    }, 300)
+
+    return () => clearInterval(interval)
+  }, [stage])
 
   // Breaking animation - crack overlay plays on top
   useEffect(() => {
@@ -50,8 +62,9 @@ export default function Home() {
         <div className="relative">
           <img
             src="/fortune/paper.png"
-            alt="Fortune paper"
-            className="w-[330px] h-auto"
+            alt=""
+            className="w-[82.5%] max-w-82.5 h-auto"
+            style={{ width: "min(82.5vw, 330px)" }}
           />
           <p className="absolute inset-0 flex items-center justify-center px-8 text-center text-sm font-serif text-gray-800">
             Your fortune awaits with wisdom beyond measure, patience brings
@@ -69,7 +82,7 @@ export default function Home() {
             style={{
               width: "200px",
               height: "400px",
-              transform: "translateX(-60vw) rotate(-25deg)",
+              transform: "translateX(max(-60vw, -400px)) rotate(-25deg)",
             }}
           >
             <div
@@ -103,7 +116,7 @@ export default function Home() {
             style={{
               width: "200px",
               height: "400px",
-              transform: "translateX(60vw) rotate(25deg)",
+              transform: "translateX(min(60vw, 400px)) rotate(25deg)",
             }}
           >
             <div
@@ -145,7 +158,7 @@ export default function Home() {
             width: "400px",
             height: "400px",
             backgroundImage: "url(/fortune/cookie.png)",
-            backgroundPosition: `0 -${stage === "breaking" ? crackFrame * 400 : 0}px`,
+            backgroundPosition: `0 -${stage === "breaking" ? crackFrame * 400 : idleFrame * 400}px`,
             backgroundSize: "400px 4000px",
             backgroundRepeat: "no-repeat",
             imageRendering: "crisp-edges",
