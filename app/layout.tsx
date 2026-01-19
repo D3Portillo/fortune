@@ -1,7 +1,7 @@
 import "./globals.css"
 import type { Metadata, Viewport } from "next"
 
-import { Inter } from "next/font/google"
+import { Inter, Libre_Baskerville } from "next/font/google"
 import { Toaster } from "sonner"
 
 import { AlertProvider } from "@/components/Alert"
@@ -15,6 +15,13 @@ const nextFont = Inter({
   adjustFontFallback: true,
   preload: true,
   weight: ["400", "500", "700", "800"],
+})
+
+const fortune = Libre_Baskerville({
+  subsets: [],
+  display: "swap",
+  weight: ["400"],
+  variable: "--font-fortune",
 })
 
 export const metadata: Metadata = {
@@ -36,7 +43,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${nextFont.className} antialiased`}>
+      <body
+        className={`${nextFont.className} ${fortune.variable} font-sans antialiased`}
+      >
         <Toaster
           swipeDirections={["left", "right", "bottom", "top"]}
           theme="light"
