@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative flex items-center justify-center min-h-screen bg-linear-to-br from-amber-50 to-orange-100 overflow-hidden">
+    <main className="relative flex items-center justify-center min-h-screen bg-linear-to-br from-amber-100 to-orange-50 overflow-hidden">
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
       {/* Fortune paper */}
