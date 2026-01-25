@@ -27,4 +27,41 @@ a {
   --color-of-yellow: #f0f757;
   --color-of-red: #d62828;
   --font-fortune: var(--font-fortune), serif;
+
+  /* Custom animations */
+  --animate-fade-in: fade-in 0.8s ease-out;
+  --animate-fade-in-delay: fade-in 1.2s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(5deg);
+    }
+  }
+
+  @keyframes pulse-subtle {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
 }

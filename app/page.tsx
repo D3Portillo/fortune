@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from "react"
 import { cn } from "./lib/utils"
 
-type Stage = "idle" | "breaking" | "broken" | "reveal" | "pot"
+type Stage = "home" | "idle" | "breaking" | "broken" | "reveal" | "pot"
 
 export default function Home() {
-  const [stage, setStage] = useState<Stage>("idle")
+  const [stage, setStage] = useState<Stage>("home")
   const [idleFrame, setIdleFrame] = useState(0)
   const [crackFrame, setCrackFrame] = useState(0)
   const [cookieLayerVisible, setCookieLayerVisible] = useState(true)
@@ -120,8 +120,45 @@ export default function Home() {
     <main className="relative flex items-center justify-center min-h-screen bg-amber-50 overflow-hidden">
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
+      {/* Home/Welcome Screen */}
+      {stage === "home" && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 via-amber-100 to-amber-50">
+          <div className="flex flex-col items-center justify-center max-w-md mx-auto px-6">
+            {/* Title with fade-in animation */}
+            <div className="mb-12 text-center animate-fade-in">
+              <h1 className="text-5xl font-bold text-black/90 mb-3 tracking-tight">
+                Fortune Cookie
+              </h1>
+              <p className="text-lg text-black/60">
+                Break one, see what's inside
+              </p>
+            </div>
+
+            {/* Floating cookie icon animation */}
+            <div className="mb-16 animate-float">
+              <div className="text-8xl filter drop-shadow-lg">🥠</div>
+            </div>
+
+            {/* Main CTA button with pulse animation */}
+            <button
+              onClick={() => setStage("idle")}
+              className="group relative overflow-hidden px-12 py-5 bg-of-orange text-white rounded-full text-xl font-semibold transition-all active:scale-98 shadow-xl animate-pulse-subtle"
+            >
+              <span className="relative z-10">See your fortune</span>
+              {/* Shine effect */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            </button>
+
+            {/* Subtle hint text */}
+            <p className="mt-8 text-sm text-black/40 animate-fade-in-delay">
+              Tap to reveal your daily fortune
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Cookie Breaking Animation */}
-      {cookieLayerVisible && (
+      {cookieLayerVisible && stage !== "home" && (
         <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
           {/* Cookie pieces flying off */}
           {(stage === "broken" || stage === "reveal") && (
@@ -312,10 +349,10 @@ export default function Home() {
                 View Pot
               </button>
               <button
-                onClick={() => setStage("idle")}
+                onClick={() => setStage("home")}
                 className="w-full py-4 text-black/50 text-base font-medium transition-opacity hover:opacity-80 active:opacity-60"
               >
-                Done
+                Back to home
               </button>
             </div>
           </div>
@@ -379,10 +416,10 @@ export default function Home() {
                 </button>
               )}
               <button
-                onClick={() => setStage("idle")}
+                onClick={() => setStage("home")}
                 className="w-full py-4 text-black/50 text-base font-medium transition-opacity hover:opacity-80 active:opacity-60"
               >
-                Done
+                Back to home
               </button>
             </div>
           </div>
