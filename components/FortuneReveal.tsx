@@ -1,97 +1,121 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { cn } from "@/app/lib/utils"
+
+const CHINESE_NUMERALS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
+
+function getSecondsUntilMidnight() {
+  const now = new Date()
+  const midnight = new Date(now)
+  midnight.setHours(24, 0, 0, 0)
+  return Math.floor((midnight.getTime() - now.getTime()) / 1000)
+}
+
+function formatCountdown(secs: number) {
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  const s = secs % 60
+  return [
+    String(h).padStart(2, "0"),
+    String(m).padStart(2, "0"),
+    String(s).padStart(2, "0"),
+  ].join(":")
+}
 
 type FortuneData = {
   message: string
-  tokensEarned: number
-  hasDiscount: boolean
-  discountPercent: number
+  chipsEarned: number
+  luckyNumber: number
 }
 
 type FortuneRevealProps = {
   fortuneData: FortuneData
   isVisible: boolean
-  onViewPot: () => void
   onBackHome: () => void
 }
 
 export function FortuneReveal({
   fortuneData,
   isVisible,
-  onViewPot,
   onBackHome,
 }: FortuneRevealProps) {
+  const [countdown, setCountdown] = useState(getSecondsUntilMidnight)
+
+  useEffect(() => {
+    const id = setInterval(
+      () => setCountdown(getSecondsUntilMidnight()),
+      1000,
+    )
+    return () => clearInterval(id)
+  }, [])
+
+  const chineseNumeral =
+    CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]
+
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/95 backdrop-blur-sm transition-opacity duration-500">
+    <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/95 backdrop-blur-sm">
       <div
         className={cn(
-          "h-full flex flex-col pt-12 pb-4",
-          "w-full max-w-md mx-auto px-8 flex flex-col transition-all duration-700 ease-out",
-          isVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-10",
+          "h-full w-full max-w-md mx-auto px-8 flex flex-col pt-16 pb-10 transition-all duration-700 ease-out",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
         )}
       >
-        {/* Fortune Text */}
-        <div className="text-center mb-16 relative">
-          <span className="absolute -rotate-12 -left-4 -top-4 text-7xl text-of-orange/30 leading-none select-none">
-            {'"'}
+        {/* Fortune message */}
+        <div className="relative text-center mb-14">
+          <span className="absolute -rotate-12 -left-2 -top-3 text-6xl text-of-orange/20 leading-none select-none">
+            &ldquo;
           </span>
-          <p className="text-2xl text-black/80 leading-relaxed px-8 font-fortune">
+          <p className="text-2xl text-black/80 leading-relaxed px-6 font-fortune">
             {fortuneData.message}
           </p>
-          <span className="absolute rotate-12 -right-4 -bottom-8 text-7xl text-of-orange/30 leading-none select-none">
-            {'"'}
+          <span className="absolute rotate-12 -right-2 -bottom-6 text-6xl text-of-orange/20 leading-none select-none">
+            &rdquo;
           </span>
         </div>
 
-        {/* Rewards */}
-        <div className="w-full space-y-3 mb-16">
-          {/* Free Ticket */}
-          <div className="flex items-center justify-between py-4 px-6 bg-white/50 rounded-2xl border border-black/5">
-            <span className="text-base text-black/80">
-              Entered into pot
+        {/* Lucky number */}
+        <div className="flex flex-col items-center mb-12">
+          <p className="text-xs tracking-widest uppercase text-black/30 mb-4">
+            Lucky Number
+          </p>
+          <div className="flex items-baseline gap-4">
+            <span className="font-fortune text-8xl text-black/85 leading-none">
+              {chineseNumeral}
             </span>
-            <span className="text-lg font-medium text-of-orange">
-              +1 ticket
-            </span>
-          </div>
-
-          {/* Tokens */}
-          <div className="flex items-center justify-between py-4 px-6 bg-white/50 rounded-2xl border border-black/5">
-            <span className="text-base text-black/80">Tokens earned</span>
-            <span className="text-lg font-medium text-of-orange">
-              +{fortuneData.tokensEarned}
+            <span className="text-3xl text-black/25 font-light tabular-nums">
+              {fortuneData.luckyNumber}
             </span>
           </div>
+        </div>
 
-          {/* Discount (conditional) */}
-          {fortuneData.hasDiscount && (
-            <div className="flex items-center justify-between py-4 px-6 bg-of-orange/10 rounded-2xl border border-of-orange/20">
-              <span className="text-base text-black/80">Today only</span>
-              <span className="text-lg font-medium text-of-orange">
-                {fortuneData.discountPercent}% off extra ticket
-              </span>
-            </div>
-          )}
+        {/* Chips earned */}
+        <div className="flex items-center justify-between py-4 px-6 bg-white/60 rounded-2xl border border-black/5">
+          <span className="text-sm text-black/60">Cookie chips earned</span>
+          <span className="text-base font-medium text-of-orange">
+            +{fortuneData.chipsEarned}
+          </span>
         </div>
 
         <div className="grow" />
 
-        {/* Actions */}
-        <div className="w-full space-y-3">
-          <button
-            onClick={onViewPot}
-            className="w-full py-4 bg-black text-white rounded-full text-base font-medium transition-opacity hover:opacity-80 active:opacity-60"
-          >
-            View Pot
-          </button>
-          <button
-            onClick={onBackHome}
-            className="w-full py-4 text-black/50 text-base font-medium transition-opacity hover:opacity-80 active:opacity-60"
-          >
-            Back to home
-          </button>
+        {/* Countdown */}
+        <div className="flex flex-col items-center mb-8">
+          <p className="text-xs tracking-widest uppercase text-black/25 mb-2">
+            Next fortune in
+          </p>
+          <p className="font-mono text-2xl text-black/45 tabular-nums tracking-tight">
+            {formatCountdown(countdown)}
+          </p>
         </div>
+
+        {/* Close */}
+        <button
+          onClick={onBackHome}
+          className="w-full text-center text-sm text-black/30 font-fortune transition-colors hover:text-black/55 active:opacity-50"
+        >
+          Close
+        </button>
       </div>
     </div>
   )
