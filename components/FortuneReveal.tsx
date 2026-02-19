@@ -51,11 +51,19 @@ export function FortuneReveal({
           <p className="text-xs tracking-widest uppercase text-black/30 mb-4">
             Lucky Number
           </p>
-          <div className="flex items-baseline gap-1">
-            <span className="font-fortune text-8xl text-black/85 leading-none">
+          <div className="relative flex items-baseline gap-1">
+            {/* Radial glow */}
+            <div
+              className="absolute inset-0 -m-8 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, rgba(255,170,70,0.25) 0%, transparent 60%)",
+              }}
+            />
+            <span className="relative font-fortune text-8xl text-black/85 leading-none">
               {chineseNumeral}
             </span>
-            <span className="text-3xl text-black/25 font-light tabular-nums">
+            <span className="relative text-3xl text-black/25 font-light tabular-nums">
               {fortuneData.luckyNumber}
             </span>
           </div>
@@ -65,10 +73,24 @@ export function FortuneReveal({
 
         {/* Chips earned */}
         <div className="flex items-center justify-between py-4 px-6 bg-white/60 rounded-2xl border border-black/5">
-          <span className="text-sm text-black/60">Cookie chips earned</span>
-          <span className="text-base font-medium text-of-orange">
-            +{fortuneData.chipsEarned}
-          </span>
+          <span className="text-sm text-black/60">Chips earned</span>
+          <div className="flex items-center gap-2">
+            {/* Stacked cookie sprites */}
+            <div className="flex items-center -space-x-2">
+              {Array.from({ length: fortuneData.chipsEarned }).map((_, i) => (
+                <img
+                  key={`chip-${i}`}
+                  src="/chips.png"
+                  alt=""
+                  className="size-7 block drop-shadow"
+                  style={{ zIndex: i }}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-bold text-of-orange tabular-nums">
+              ×{fortuneData.chipsEarned}
+            </span>
+          </div>
         </div>
 
         {/* Return */}

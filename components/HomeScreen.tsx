@@ -113,13 +113,13 @@ export function HomeScreen() {
               <>
                 {/* Fortune message */}
                 <div className="relative text-center mb-8">
-                  <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange/20 leading-none select-none">
+                  <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange leading-none select-none">
                     &ldquo;
                   </span>
                   <p className="text-lg text-black/70 leading-relaxed px-4 font-fortune">
                     {fortuneData.message}
                   </p>
-                  <span className="absolute rotate-12 -right-2 -bottom-5 text-5xl text-of-orange/20 leading-none select-none">
+                  <span className="absolute rotate-12 -right-2 -bottom-5 text-5xl text-of-orange leading-none select-none">
                     &rdquo;
                   </span>
                 </div>
@@ -129,7 +129,7 @@ export function HomeScreen() {
                   <p className="text-xs tracking-widest uppercase text-black/25 mb-3">
                     Lucky Number
                   </p>
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-1">
                     <span className="font-fortune text-7xl text-black/80 leading-none">
                       {CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]}
                     </span>
