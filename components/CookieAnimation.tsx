@@ -18,7 +18,7 @@ export function CookieAnimation({
   return (
     <div className="absolute inset-0 flex items-center justify-center z-40 bg-amber-50 pointer-events-none">
       {/* Tap hint */}
-      <p className="absolute bottom-0 w-full text-center text-xs text-black/30 py-4 pointer-events-none">
+      <p className="absolute bottom-0 w-full text-center text-xs text-black/30 py-5 pointer-events-none">
         Tap to break
       </p>
       {/* Cookie pieces flying off */}

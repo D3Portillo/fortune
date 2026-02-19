@@ -90,7 +90,14 @@ export function HomeScreen() {
     <>
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
-      <div className="absolute inset-0 flex flex-col bg-linear-to-b from-amber-50 via-amber-100 to-amber-50">
+      <div
+        className={cn(
+          "absolute inset-0 flex flex-col",
+          hasBroken
+            ? "bg-amber-50"
+            : "bg-linear-to-b from-amber-50 via-amber-100 to-amber-50",
+        )}
+      >
         {/* ── Top nav ── */}
         <TopNav />
 
@@ -106,7 +113,7 @@ export function HomeScreen() {
               )}
 
               <p className="mt-2 text-xs text-black/35 tracking-widest uppercase">
-                {hasBroken ? "Today's fortune" : "Break it, see what's inside"}
+                {hasBroken ? "Today's fortune" : "Break the cookie to find out"}
               </p>
             </div>
             {hasBroken ? (
@@ -127,7 +134,7 @@ export function HomeScreen() {
                 {/* Lucky number */}
                 <div className="flex flex-col items-center">
                   <p className="text-xs tracking-widest uppercase text-black/25 mb-3">
-                    Lucky Number
+                    YOUR LUCKY NUMBER
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="font-fortune text-7xl text-black/80 leading-none">
@@ -174,7 +181,7 @@ export function HomeScreen() {
             <div className="flex items-center justify-between px-5 py-4 bg-white/60 rounded-2xl border border-black/6">
               <div className="flex flex-col">
                 <p className="text-xs tracking-widest uppercase text-black/25 mb-0.5">
-                  NEXT COOKIE IN
+                  MORE COOKIES IN
                 </p>
 
                 <p className="font-mono text-2xl text-black/60 tabular-nums tracking-tight leading-none">
