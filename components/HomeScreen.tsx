@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
+import { TopNav } from "./TopNav"
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
+import { cn } from "@/app/lib/utils"
 
 const CHINESE_NUMERALS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
 
@@ -88,81 +90,102 @@ export function HomeScreen() {
     <>
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-b from-amber-50 via-amber-100 to-amber-50">
-        <div className="flex flex-col items-center justify-center max-w-md mx-auto px-6">
-          {/* Title */}
-          <div className="mb-10 text-center">
-            <h1 className="text-4xl font-semibold text-black/85 tracking-tight">
-              Fortune Cookie
-            </h1>
-            <p className="mt-2 text-xs text-black/35 tracking-widest uppercase">
-              {hasBroken ? "Today's fortune" : "Break one, see what\u2019s inside"}
-            </p>
-          </div>
+      <div className="absolute inset-0 flex flex-col bg-linear-to-b from-amber-50 via-amber-100 to-amber-50">
+        {/* ── Top nav ── */}
+        <TopNav />
 
-          {hasBroken ? (
-            /* ── Broken state: fortune summary ── */
-            <div className="flex flex-col items-center w-full max-w-xs">
-              {/* Fortune message */}
-              <div className="relative text-center mb-10">
-                <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange/20 leading-none select-none">&ldquo;</span>
-                <p className="text-lg text-black/70 leading-relaxed px-4 font-fortune">
-                  {fortuneData.message}
-                </p>
-                <span className="absolute rotate-12 -right-2 -bottom-5 text-5xl text-of-orange/20 leading-none select-none">&rdquo;</span>
-              </div>
+        {/* ── Middle: title + cookie or fortune — all centered ── */}
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="flex flex-col items-center w-full max-w-xs">
+            {/* Title */}
+            <div className={cn("text-center", hasBroken ? "mb-4" : "mb-10")}>
+              {hasBroken ? null : (
+                <h1 className="text-4xl font-fortune font-semibold text-black/85 tracking-tight">
+                  What's your fortune today?
+                </h1>
+              )}
 
-              {/* Lucky number */}
-              <div className="flex flex-col items-center mb-10">
-                <p className="text-xs tracking-widest uppercase text-black/25 mb-3">Lucky Number</p>
-                <div className="flex items-baseline gap-3">
-                  <span className="font-fortune text-7xl text-black/80 leading-none">
-                    {CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]}
+              <p className="mt-2 text-xs text-black/35 tracking-widest uppercase">
+                {hasBroken ? "Today's fortune" : "Break it, see what's inside"}
+              </p>
+            </div>
+            {hasBroken ? (
+              <>
+                {/* Fortune message */}
+                <div className="relative text-center mb-8">
+                  <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange/20 leading-none select-none">
+                    &ldquo;
                   </span>
-                  <span className="text-2xl text-black/20 font-light tabular-nums">
-                    {fortuneData.luckyNumber}
+                  <p className="text-lg text-black/70 leading-relaxed px-4 font-fortune">
+                    {fortuneData.message}
+                  </p>
+                  <span className="absolute rotate-12 -right-2 -bottom-5 text-5xl text-of-orange/20 leading-none select-none">
+                    &rdquo;
                   </span>
                 </div>
-              </div>
 
-              {/* Countdown */}
-              <div className="flex flex-col items-center">
-                <p className="text-xs tracking-widest uppercase text-black/25 mb-1">Next fortune in</p>
-                <p className="font-mono text-xl text-black/40 tabular-nums tracking-tight">
+                {/* Lucky number */}
+                <div className="flex flex-col items-center">
+                  <p className="text-xs tracking-widest uppercase text-black/25 mb-3">
+                    Lucky Number
+                  </p>
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-fortune text-7xl text-black/80 leading-none">
+                      {CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]}
+                    </span>
+                    <span className="text-2xl text-black/20 font-light tabular-nums">
+                      {fortuneData.luckyNumber}
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* Cookie + CTA */
+              <button
+                onClick={handleStartCookieFlow}
+                className="group flex flex-col items-center focus:outline-none active:opacity-70"
+              >
+                <div className="mb-16 animate-cookie-breathe">
+                  <div
+                    style={{
+                      width: "240px",
+                      height: "240px",
+                      backgroundImage: "url(/fortune/cookie.png)",
+                      backgroundPosition: "0 0",
+                      backgroundSize: "240px 2400px",
+                      backgroundRepeat: "no-repeat",
+                      imageRendering: "crisp-edges",
+                    }}
+                  />
+                </div>
+                <span className="flex items-center gap-2 font-fortune text-xl text-black/65 transition-colors group-hover:text-black/90">
+                  <span>Tap to break</span>
+                  <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+                    →
+                  </span>
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+        {/* ── Bottom: clock card ── */}
+        <div className="px-6 pb-10">
+          {hasBroken && (
+            <div className="flex items-center justify-between px-5 py-4 bg-white/60 rounded-2xl border border-black/6">
+              <div className="flex flex-col">
+                <p className="text-xs tracking-widest uppercase text-black/25 mb-0.5">
+                  NEXT COOKIE IN
+                </p>
+
+                <p className="font-mono text-2xl text-black/60 tabular-nums tracking-tight leading-none">
                   {formatCountdown(countdown)}
                 </p>
               </div>
+              <button className="text-sm text-black/40 underline underline-offset-4 font-fortune transition-colors hover:text-black/70 active:opacity-50">
+                Claim now
+              </button>
             </div>
-          ) : (
-            /* ── Default state: cookie + CTA ── */
-            <button
-              onClick={handleStartCookieFlow}
-              className="group flex flex-col items-center gap-0 focus:outline-none active:opacity-70"
-            >
-              {/* Cookie — scale breathe */}
-              <div className="mb-16 animate-cookie-breathe">
-                <div
-                  style={{
-                    width: "240px",
-                    height: "240px",
-                    backgroundImage: "url(/fortune/cookie.png)",
-                    backgroundPosition: "0 0",
-                    backgroundSize: "240px 2400px",
-                    backgroundRepeat: "no-repeat",
-                    imageRendering: "crisp-edges",
-                  }}
-                />
-              </div>
-
-              {/* CTA text */}
-              <span className="flex items-center gap-2 font-fortune text-xl text-black/65 transition-colors group-hover:text-black/90">
-                <span>Tap to break</span>
-                <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
-              </span>
-            </button>
           )}
-
-
         </div>
       </div>
 
