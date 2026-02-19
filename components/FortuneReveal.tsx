@@ -1,8 +1,6 @@
 "use client"
 
-import { cn } from "@/app/lib/utils"
-
-const CHINESE_NUMERALS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
+import { cn, toChinaNumeral } from "@/app/lib/utils"
 
 type FortuneData = {
   message: string
@@ -21,7 +19,7 @@ export function FortuneReveal({
   isVisible,
   onBackHome,
 }: FortuneRevealProps) {
-  const chineseNumeral = CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]
+  const chineseNumeral = toChinaNumeral(fortuneData.luckyNumber)
 
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/95 backdrop-blur-sm">
@@ -60,7 +58,7 @@ export function FortuneReveal({
                   "radial-gradient(ellipse at center, rgba(255,170,70,0.15) 0%, transparent 40%)",
               }}
             />
-            <span className="relative font-fortune text-8xl text-black/85 leading-none">
+            <span className="relative font-china text-8xl text-black/85 leading-none">
               {chineseNumeral}
             </span>
             <span className="relative text-3xl text-black/25 font-light tabular-nums">

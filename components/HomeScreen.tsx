@@ -5,9 +5,7 @@ import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
-import { cn } from "@/app/lib/utils"
-
-const CHINESE_NUMERALS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
+import { cn, toChinaNumeral } from "@/app/lib/utils"
 
 function getSecondsUntilMidnight() {
   const now = new Date()
@@ -107,7 +105,7 @@ export function HomeScreen() {
             {/* Title */}
             <div className={cn("text-center", hasBroken ? "mb-4" : "mb-10")}>
               {hasBroken ? null : (
-                <h1 className="text-4xl font-fortune font-semibold text-black/85 tracking-tight">
+                <h1 className="text-4xl font-fortune font-bold text-black/85 tracking-tight">
                   What's your fortune today?
                 </h1>
               )}
@@ -137,8 +135,8 @@ export function HomeScreen() {
                     YOUR LUCKY NUMBER
                   </p>
                   <div className="flex items-baseline gap-1">
-                    <span className="font-fortune text-7xl text-black/80 leading-none">
-                      {CHINESE_NUMERALS[(fortuneData.luckyNumber - 1) % 9]}
+                    <span className="font-china text-7xl text-black/80 leading-none">
+                      {toChinaNumeral(fortuneData.luckyNumber)}
                     </span>
                     <span className="text-2xl text-black/20 font-light tabular-nums">
                       {fortuneData.luckyNumber}

@@ -36,7 +36,7 @@ export function AlertProvider() {
 
       <button
         onClick={() => setState((prev) => ({ ...prev, isOpen: false }))}
-        className="mt-7 bg-white text-black px-5 py-2 rounded-xl font-semibold hover:bg-white/90 transition"
+        className="mt-7 bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-white/90 transition"
       >
         CLOSE
       </button>

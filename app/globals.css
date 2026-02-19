@@ -21,6 +21,7 @@ a {
   --color-of-yellow: #f0f757;
   --color-of-red: #d62828;
   --font-fortune: var(--font-fortune), serif;
+  --font-china: var(--font-china), serif;
 
   /* Custom animations */
   --animate-fade-in: fade-in 0.8s ease-out;
