@@ -11,7 +11,7 @@ interface DialogProps
   id?: string
 }
 
-const Dialog = ({ id, open, onOpenChange, ...props }: DialogProps) => {
+const Dialog = ({ id, ...props }: DialogProps) => {
   return <DialogPrimitive.Root {...props} />
 }
 

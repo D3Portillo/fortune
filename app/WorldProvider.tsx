@@ -6,7 +6,7 @@ import { validator } from "@/app/actions/validator"
 
 export default function Provider({ children }: PropsWithChildren) {
   return (
-    <WorldAppProvider appName="WIP_MINI_APP" withValidator={validator}>
+    <WorldAppProvider appName="F1_APP" withValidator={validator}>
       {children}
     </WorldAppProvider>
   )

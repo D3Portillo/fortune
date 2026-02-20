@@ -174,7 +174,7 @@ export function HomeScreen() {
           </div>
         </div>
         {/* ── Bottom: clock card ── */}
-        <div className="px-6 pb-10">
+        <div className="px-6 py-10">
           {hasBroken && (
             <div className="flex items-center justify-between px-5 py-4 bg-white/60 rounded-2xl border border-black/6">
               <div className="flex flex-col">

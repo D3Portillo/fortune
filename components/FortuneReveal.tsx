@@ -85,7 +85,7 @@ export function FortuneReveal({
                 />
               ))}
             </div>
-            <span className="text-sm font-bold text-of-orange tabular-nums">
+            <span className="text-sm font-bold text-black tabular-nums">
               ×{fortuneData.chipsEarned}
             </span>
           </div>
