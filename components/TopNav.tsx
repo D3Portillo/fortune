@@ -18,12 +18,12 @@ export function TopNav() {
         <Image className="w-full" src={asset_logo} alt="" />
       </figure>
 
-      <button onClick={signIn} className="flex gap-2 items-center">
+      <button onClick={signIn} className="flex gap-3 items-center">
         <h1 className="text-black text-sm font-semibold">
           {address ? beautifyAddress(address) : "Connect"}
         </h1>
-        <div className="size-9.5 saturate-200 border-2 border-black overflow-hidden rounded-xl">
-          <AddressBlock address={address} />
+        <div className="size-9.5 overflow-hidden rounded-xl">
+          <AddressBlock name={address} />
         </div>
       </button>
     </nav>
