@@ -20,10 +20,21 @@ export function TopNav() {
 
       <button onClick={signIn} className="flex gap-3 items-center">
         <h1 className="text-black text-sm font-semibold">
-          {address ? beautifyAddress(address) : "Connect"}
+          {address ? beautifyAddress(address, 4, "") : "Connect"}
         </h1>
         <div className="size-9.5 overflow-hidden rounded-xl">
-          <AddressBlock name={address} />
+          <AddressBlock
+            name={address?.replace("0x", "")}
+            onRenderMouth={() => (
+              <span
+                style={{
+                  fontSize: "26cqw",
+                }}
+              >
+                W
+              </span>
+            )}
+          />
         </div>
       </button>
     </nav>
