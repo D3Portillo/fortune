@@ -1,11 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Fragment } from "react"
+import { useWorldAuth } from "@radish-la/world-auth"
+
+import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
+import { cn, toChinaNumeral } from "@/app/lib/utils"
+
 import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
-import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
-import { cn, toChinaNumeral } from "@/app/lib/utils"
 
 function getSecondsUntilMidnight() {
   const now = new Date()
@@ -24,6 +27,7 @@ function formatCountdown(secs: number) {
 type Stage = "idle" | "breaking" | "broken" | "reveal"
 
 export function HomeScreen() {
+  const { isConnected, signIn } = useWorldAuth()
   const [showCookieFlow, setShowCookieFlow] = useState(false)
   const [stage, setStage] = useState<Stage>("idle")
   const [hasBroken, setHasBroken] = useState(false)
@@ -67,6 +71,7 @@ export function HomeScreen() {
   }, [showCookieFlow, stage, crackFrame])
 
   const handleStartCookieFlow = () => {
+    if (!isConnected) return signIn()
     setShowCookieFlow(true)
     setStage("idle")
   }
@@ -85,7 +90,7 @@ export function HomeScreen() {
   }
 
   return (
-    <>
+    <Fragment>
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
       <div
@@ -163,6 +168,7 @@ export function HomeScreen() {
                     }}
                   />
                 </div>
+
                 <span className="flex items-center gap-2 font-fortune text-xl text-black/65 transition-colors group-hover:text-black/90">
                   <span>Tap to break</span>
                   <span className="transition-transform duration-200 group-hover:translate-x-0.5">
@@ -195,7 +201,7 @@ export function HomeScreen() {
       </div>
 
       {showCookieFlow && (
-        <>
+        <Fragment>
           {cookieLayerVisible && (
             <CookieAnimation
               stage={stage}
@@ -212,8 +218,8 @@ export function HomeScreen() {
               onBackHome={handleBackHome}
             />
           )}
-        </>
+        </Fragment>
       )}
-    </>
+    </Fragment>
   )
 }

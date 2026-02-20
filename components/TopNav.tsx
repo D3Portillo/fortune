@@ -18,7 +18,7 @@ export function TopNav() {
         <Image className="w-full" src={asset_logo} alt="" />
       </figure>
 
-      <button className="flex gap-2 items-center">
+      <button onClick={signIn} className="flex gap-2 items-center">
         <h1 className="text-black text-sm font-semibold">
           {address ? beautifyAddress(address) : "Connect"}
         </h1>
