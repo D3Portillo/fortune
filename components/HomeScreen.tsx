@@ -1,10 +1,17 @@
 "use client"
 
 import { useState, useEffect, Fragment } from "react"
+import { useAtom } from "jotai"
 import { useWorldAuth } from "@radish-la/world-auth"
 
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
 import { cn, toChinaNumeral } from "@/app/lib/utils"
+import {
+  dailyFortuneAtom,
+  getTodayString,
+  getFortuneMessage,
+} from "@/app/atoms/fortune"
+import { pickFortuneIndex } from "@/app/lib/fortunes"
 
 import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
@@ -26,12 +33,15 @@ function formatCountdown(secs: number) {
 
 type Stage = "idle" | "breaking" | "broken" | "reveal"
 
+const MAX_LUCKY_NUMBER = 9
+const MAX_CHIPS = 5
+
 export function HomeScreen() {
   const { isConnected, signIn } = useWorldAuth()
   const [showCookieFlow, setShowCookieFlow] = useState(false)
   const [stage, setStage] = useState<Stage>("idle")
-  const [hasBroken, setHasBroken] = useState(false)
   const [countdown, setCountdown] = useState(getSecondsUntilMidnight)
+  const [fortuneState, setFortuneState] = useAtom(dailyFortuneAtom)
   const {
     idleFrame,
     crackFrame,
@@ -41,11 +51,14 @@ export function HomeScreen() {
     resetCrackFrame,
   } = useCookieAnimation(showCookieFlow ? stage : "idle")
 
-  // Mock data - will come from backend later
+  // Cookie has been broken today if the stored date matches today
+  const hasBroken =
+    fortuneState.date !== null && fortuneState.date === getTodayString()
+
   const fortuneData = {
-    message: "Your patience today will bring unexpected rewards tomorrow",
-    chipsEarned: 3,
-    luckyNumber: 7,
+    message: getFortuneMessage(fortuneState),
+    chipsEarned: fortuneState.chipsEarned,
+    luckyNumber: fortuneState.luckyNumber,
   }
 
   // Countdown tick
@@ -55,12 +68,19 @@ export function HomeScreen() {
     return () => clearInterval(id)
   }, [hasBroken])
 
-  // Auto-transition from broken to reveal
+  // Auto-transition from broken to reveal — also generate and persist the fortune
   useEffect(() => {
     if (!showCookieFlow || stage !== "broken") return
+    const newIndex = pickFortuneIndex(fortuneState.index)
+    setFortuneState({
+      index: newIndex,
+      date: getTodayString(),
+      luckyNumber: (newIndex % MAX_LUCKY_NUMBER) + 1,
+      chipsEarned: (newIndex % MAX_CHIPS) + 1,
+    })
     const timer = setTimeout(() => setStage("reveal"), 100)
     return () => clearTimeout(timer)
-  }, [showCookieFlow, stage])
+  }, [showCookieFlow, stage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-transition when crack animation completes
   useEffect(() => {
@@ -86,7 +106,6 @@ export function HomeScreen() {
   const handleBackHome = () => {
     setShowCookieFlow(false)
     setStage("idle")
-    setHasBroken(true)
   }
 
   return (
