@@ -5,10 +5,11 @@ import { useAtom } from "jotai"
 import { useWorldAuth } from "@radish-la/world-auth"
 
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
+import { isConnectedOrDevEnv } from "@/app/lib/env"
 import { cn, toChinaNumeral } from "@/app/lib/utils"
 import {
   dailyFortuneAtom,
-  getTodayString,
+  getClaimDayString,
   getFortuneMessage,
 } from "@/app/atoms/fortune"
 import { pickFortuneIndex } from "@/app/lib/fortunes"
@@ -17,11 +18,16 @@ import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
 
-function getSecondsUntilMidnight() {
+function getSecondsUntilNextClaimReset() {
   const now = new Date()
-  const midnight = new Date(now)
-  midnight.setHours(24, 0, 0, 0)
-  return Math.floor((midnight.getTime() - now.getTime()) / 1000)
+  const nextReset = new Date(now)
+  nextReset.setHours(1, 0, 0, 0)
+
+  if (now >= nextReset) {
+    nextReset.setDate(nextReset.getDate() + 1)
+  }
+
+  return Math.floor((nextReset.getTime() - now.getTime()) / 1000)
 }
 
 function formatCountdown(secs: number) {
@@ -37,10 +43,10 @@ const MAX_LUCKY_NUMBER = 9
 const MAX_CHIPS = 5
 
 export function HomeScreen() {
-  const { isConnected, signIn } = useWorldAuth()
+  const { address, signIn } = useWorldAuth()
   const [showCookieFlow, setShowCookieFlow] = useState(false)
   const [stage, setStage] = useState<Stage>("idle")
-  const [countdown, setCountdown] = useState(getSecondsUntilMidnight)
+  const [countdown, setCountdown] = useState(getSecondsUntilNextClaimReset)
   const [fortuneState, setFortuneState] = useAtom(dailyFortuneAtom)
   const {
     idleFrame,
@@ -53,7 +59,7 @@ export function HomeScreen() {
 
   // Cookie has been broken today if the stored date matches today
   const hasBroken =
-    fortuneState.date !== null && fortuneState.date === getTodayString()
+    fortuneState.date !== null && fortuneState.date === getClaimDayString()
 
   const fortuneData = {
     message: getFortuneMessage(fortuneState),
@@ -64,7 +70,10 @@ export function HomeScreen() {
   // Countdown tick
   useEffect(() => {
     if (!hasBroken) return
-    const id = setInterval(() => setCountdown(getSecondsUntilMidnight()), 1000)
+    const id = setInterval(
+      () => setCountdown(getSecondsUntilNextClaimReset()),
+      1000,
+    )
     return () => clearInterval(id)
   }, [hasBroken])
 
@@ -74,7 +83,7 @@ export function HomeScreen() {
     const newIndex = pickFortuneIndex(fortuneState.index)
     setFortuneState({
       index: newIndex,
-      date: getTodayString(),
+      date: getClaimDayString(),
       luckyNumber: (newIndex % MAX_LUCKY_NUMBER) + 1,
       chipsEarned: (newIndex % MAX_CHIPS) + 1,
     })
@@ -91,7 +100,7 @@ export function HomeScreen() {
   }, [showCookieFlow, stage, crackFrame])
 
   const handleStartCookieFlow = () => {
-    if (!isConnected) return signIn()
+    if (!isConnectedOrDevEnv(address)) return signIn()
     setShowCookieFlow(true)
     setStage("idle")
   }

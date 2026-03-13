@@ -1,16 +1,22 @@
 import { atomWithStorage } from "jotai/utils"
 import { FORTUNES } from "@/app/lib/fortunes"
 
-/** Returns today's date as a "YYYY-MM-DD" string in local time. */
-export function getTodayString(): string {
+/**
+ * Returns the local claim-day key as "YYYY-MM-DD".
+ * The claim day rolls over at 01:00 (1AM), not midnight.
+ */
+export function getClaimDayString(): string {
   const d = new Date()
+  if (d.getHours() < 1) {
+    d.setDate(d.getDate() - 1)
+  }
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 }
 
 export type FortuneState = {
   /** Index into the FORTUNES array (null = never set) */
   index: number | null
-  /** Date string "YYYY-MM-DD" of the day the fortune was last generated */
+  /** Claim-day key "YYYY-MM-DD" of the last generated fortune (1AM rollover) */
   date: string | null
   /** Lucky number associated with this fortune */
   luckyNumber: number
@@ -32,6 +38,8 @@ const DEFAULT_FORTUNE_STATE: FortuneState = {
 export const dailyFortuneAtom = atomWithStorage<FortuneState>(
   "fortune:daily",
   DEFAULT_FORTUNE_STATE,
+  undefined,
+  { getOnInit: true },
 )
 
 /** Derive the message from a FortuneState (returns empty string if unset). */
