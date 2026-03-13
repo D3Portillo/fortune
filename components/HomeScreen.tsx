@@ -17,6 +17,7 @@ import { pickFortuneIndex } from "@/app/lib/fortunes"
 import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
+import { ActionClaimWithModal } from "./ActionClaimWithModal"
 
 function getSecondsUntilNextClaimReset() {
   const now = new Date()
@@ -220,9 +221,7 @@ export function HomeScreen() {
                   {formatCountdown(countdown)}
                 </p>
               </div>
-              <button className="text-sm text-black/40 underline underline-offset-4 font-fortune transition-colors hover:text-black/70 active:opacity-50">
-                Claim now
-              </button>
+              <ActionClaimWithModal />
             </div>
           )}
         </div>
