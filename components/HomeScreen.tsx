@@ -141,16 +141,12 @@ export function HomeScreen() {
         <div
           className={cn(
             "flex-1 flex items-center justify-center px-6",
-            hasBroken && "relative overflow-hidden",
+            hasBroken && "relative",
           )}
           onClick={
             hasBroken
               ? (e) => {
-                  const rect = e.currentTarget.getBoundingClientRect()
-                  setTapOrigin({
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top,
-                  })
+                  setTapOrigin({ x: e.clientX, y: e.clientY })
                   setTapTrigger((t) => t + 1)
                 }
               : undefined
