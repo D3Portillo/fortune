@@ -11,7 +11,7 @@ import { isConnectedOrDevEnv } from "@/app/lib/env"
 import { dailyFortuneAtom } from "@/app/atoms/fortune"
 
 import AddressBlock from "./AddressBlock"
-import Dialog from "./Dialog"
+import GameDialog from "./GameDialog"
 
 export function TopNav() {
   const { address, signIn, signOut } = useWorldAuth()
@@ -56,7 +56,18 @@ export function TopNav() {
       </button>
 
       {connected && (
-        <Dialog open={menuOpen} onOpenChange={setMenuOpen} title="My Cookies">
+        <GameDialog
+          open={menuOpen}
+          onOpenChange={setMenuOpen}
+          title="My Cookies"
+          actions={[
+            {
+              label: "Disconnect",
+              onClick: signOut,
+              closeOnTap: true,
+            },
+          ]}
+        >
           {/* Cookie balance */}
           <div className="flex items-center justify-between py-4 px-1 border-b border-white/10">
             <span className="text-sm text-white/70">Earned</span>
@@ -79,18 +90,7 @@ export function TopNav() {
               </span>
             </div>
           </div>
-
-          {/* Disconnect */}
-          <button
-            onClick={() => {
-              signOut()
-              setMenuOpen(false)
-            }}
-            className="w-full mt-4 py-3.5 px-6 rounded-2xl bg-white/8 text-white/50 text-sm font-semibold hover:bg-white/12 hover:text-white/70 active:opacity-60 transition-colors"
-          >
-            Disconnect
-          </button>
-        </Dialog>
+        </GameDialog>
       )}
     </nav>
   )

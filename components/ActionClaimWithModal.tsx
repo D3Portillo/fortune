@@ -1,15 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import Dialog from "./Dialog"
+import GameDialog from "./GameDialog"
 
 export function ActionClaimWithModal() {
   const [showClaimDialog, setShowClaimDialog] = useState(false)
-
-  const onConfirm = () => {
-    // TODO: handle claim logic
-    setShowClaimDialog(false)
-  }
 
   return (
     <>
@@ -20,22 +15,25 @@ export function ActionClaimWithModal() {
         Claim now
       </button>
 
-      <Dialog
+      <GameDialog
         open={showClaimDialog}
         onOpenChange={setShowClaimDialog}
         title="Claim your fortune"
+        actions={[
+          {
+            label: "CONFIRM",
+            onClick: () => {
+              // TODO: handle claim logic
+            },
+            closeOnTap: true,
+          },
+        ]}
       >
         <p className="text-sm text-white/70">
           You&apos;re about to claim your next fortune cookie early. Are you
           sure you want to proceed?
         </p>
-        <button
-          onClick={onConfirm}
-          className="mt-7 bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-white/90 transition w-full"
-        >
-          CONFIRM
-        </button>
-      </Dialog>
+      </GameDialog>
     </>
   )
 }
