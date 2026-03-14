@@ -14,11 +14,12 @@ import {
 } from "@/app/atoms/fortune"
 import { pickFortuneIndex } from "@/app/lib/fortunes"
 
+import confetti from "canvas-confetti"
+
 import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
 import { ActionClaimWithModal } from "./ActionClaimWithModal"
-import { FortuneTapConfetti } from "./FortuneTapConfetti"
 
 function getSecondsUntilNextClaimReset() {
   const now = new Date()
@@ -136,14 +137,14 @@ export function HomeScreen() {
 
         {/* ── Middle: title + cookie or fortune — all centered ── */}
         <div
-          className={cn(
-            "flex-1 flex items-center justify-center px-6",
-            hasBroken && "relative",
-          )}
+          className="flex-1 flex items-center justify-center px-6 relative"
+          onClick={hasBroken ? (e) => {
+            const x = e.clientX / window.innerWidth
+            const y = e.clientY / window.innerHeight
+            confetti({ particleCount: 12, spread: 120, origin: { x, y }, shapes: [confetti.shapeFromText({ text: "🥠", scalar: 2 })], scalar: 2, colors: ["#fcab40","#f5c518","#e8c4a0","#d4881a","#f0e68c","#8B5E3C"], gravity: 0.9, disableForReducedMotion: true })
+            confetti({ particleCount: 35, spread: 100, origin: { x, y }, shapes: ["square"], colors: ["#fcab40","#f5c518","#e8c4a0","#d4881a","#f0e68c","#8B5E3C"], gravity: 1.1, disableForReducedMotion: true })
+          } : undefined}
         >
-          {hasBroken && (
-            <FortuneTapConfetti />
-          )}
           <div className="flex flex-col items-center w-full max-w-xs">
             {/* Title */}
             <div className={cn("text-center", hasBroken ? "mb-4" : "mb-10")}>
