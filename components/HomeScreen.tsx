@@ -18,6 +18,7 @@ import { CookieAnimation } from "./CookieAnimation"
 import { FortuneReveal } from "./FortuneReveal"
 import { TopNav } from "./TopNav"
 import { ActionClaimWithModal } from "./ActionClaimWithModal"
+import { FortuneTapConfetti } from "./FortuneTapConfetti"
 
 function getSecondsUntilNextClaimReset() {
   const now = new Date()
@@ -57,6 +58,9 @@ export function HomeScreen() {
     audioRef,
     resetCrackFrame,
   } = useCookieAnimation(showCookieFlow ? stage : "idle")
+
+  const [tapTrigger, setTapTrigger] = useState(0)
+  const [tapOrigin, setTapOrigin] = useState({ x: 0, y: 0 })
 
   // Cookie has been broken today if the stored date matches today
   const hasBroken =
@@ -134,7 +138,27 @@ export function HomeScreen() {
         <TopNav />
 
         {/* ── Middle: title + cookie or fortune — all centered ── */}
-        <div className="flex-1 flex items-center justify-center px-6">
+        <div
+          className={cn(
+            "flex-1 flex items-center justify-center px-6",
+            hasBroken && "relative overflow-hidden",
+          )}
+          onClick={
+            hasBroken
+              ? (e) => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  setTapOrigin({
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top,
+                  })
+                  setTapTrigger((t) => t + 1)
+                }
+              : undefined
+          }
+        >
+          {hasBroken && (
+            <FortuneTapConfetti trigger={tapTrigger} origin={tapOrigin} />
+          )}
           <div className="flex flex-col items-center w-full max-w-xs">
             {/* Title */}
             <div className={cn("text-center", hasBroken ? "mb-4" : "mb-10")}>

@@ -2,18 +2,9 @@
 
 import { useState } from "react"
 import Dialog from "./Dialog"
-import { Confetti } from "./Confetti"
 
 export function ActionClaimWithModal() {
   const [showClaimDialog, setShowClaimDialog] = useState(false)
-  const [confettiTrigger, setConfettiTrigger] = useState(0)
-  const [confettiOrigin, setConfettiOrigin] = useState<{ x: number; y: number } | undefined>()
-
-  const handleClaimClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setConfettiOrigin({ x: e.clientX, y: e.clientY })
-    setConfettiTrigger((t) => t + 1)
-    setShowClaimDialog(true)
-  }
 
   const onConfirm = () => {
     // TODO: handle claim logic
@@ -22,9 +13,8 @@ export function ActionClaimWithModal() {
 
   return (
     <>
-      <Confetti trigger={confettiTrigger} origin={confettiOrigin} />
       <button
-        onClick={handleClaimClick}
+        onClick={() => setShowClaimDialog(true)}
         className="text-sm text-black/40 underline underline-offset-4 font-fortune transition-colors hover:text-black/70 active:opacity-50"
       >
         Claim now
