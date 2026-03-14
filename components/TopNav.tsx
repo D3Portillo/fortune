@@ -69,8 +69,8 @@ export function TopNav() {
           ]}
         >
           {/* Cookie balance */}
-          <div className="flex items-center justify-between py-4 px-1 border-b border-white/10">
-            <span className="text-sm text-white/70">Earned</span>
+          <div className="flex items-center justify-between py-4 px-1 border-b border-black/8">
+            <span className="text-sm text-black/50">Earned</span>
             <div className="flex items-center gap-2">
               <div className="flex items-center -space-x-4">
                 {Array.from({
@@ -85,7 +85,7 @@ export function TopNav() {
                   />
                 ))}
               </div>
-              <span className="text-base font-bold text-white tabular-nums">
+              <span className="text-base font-bold text-black tabular-nums">
                 {fortuneState.chipsEarned}
               </span>
             </div>

@@ -34,11 +34,15 @@ export default function GameDialog({
       {children}
       {cappedActions.length > 0 && (
         <div className="flex flex-col gap-4 mt-4">
-          {cappedActions.map((action) => (
+          {cappedActions.map((action, i) => (
             <button
               key={action.label}
               onClick={() => handleAction(action)}
-              className="w-full py-3.5 px-6 rounded-2xl bg-white/8 text-white/50 text-sm font-semibold hover:bg-white/12 hover:text-white/70 active:opacity-60 transition-colors"
+              className={
+                i === 0
+                  ? "w-full py-3.5 px-6 rounded-xl bg-black text-white text-sm font-semibold hover:bg-black/90 active:opacity-60 transition-colors"
+                  : "w-full py-3.5 px-6 rounded-xl bg-black/8 text-black/70 text-sm font-semibold hover:bg-black/12 active:opacity-60 transition-colors"
+              }
             >
               {action.label}
             </button>

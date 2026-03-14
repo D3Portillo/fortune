@@ -29,7 +29,7 @@ export function ActionClaimWithModal() {
           },
         ]}
       >
-        <p className="text-sm text-white/70">
+        <p className="text-sm text-black/60">
           You&apos;re about to claim your next fortune cookie early. Are you
           sure you want to proceed?
         </p>
