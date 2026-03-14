@@ -13,8 +13,6 @@ import { dailyFortuneAtom } from "@/app/atoms/fortune"
 import AddressBlock from "./AddressBlock"
 import Dialog from "./Dialog"
 
-const MAX_DISPLAYED_CHIPS = 5
-
 export function TopNav() {
   const { address, signIn, signOut } = useWorldAuth()
   const [fortuneState] = useAtom(dailyFortuneAtom)
@@ -58,20 +56,14 @@ export function TopNav() {
       </button>
 
       {connected && (
-        <Dialog
-          open={menuOpen}
-          onOpenChange={setMenuOpen}
-          title="My Cookies"
-        >
+        <Dialog open={menuOpen} onOpenChange={setMenuOpen} title="My Cookies">
           {/* Cookie balance */}
           <div className="flex items-center justify-between py-4 px-1 border-b border-white/10">
-            <span className="text-sm text-white/50 uppercase tracking-widest">
-              Balance
-            </span>
+            <span className="text-sm text-white/70">Earned</span>
             <div className="flex items-center gap-2">
-              <div className="flex items-center -space-x-2">
+              <div className="flex items-center -space-x-4">
                 {Array.from({
-                  length: Math.min(fortuneState.chipsEarned, MAX_DISPLAYED_CHIPS),
+                  length: 3,
                 }).map((_, i) => (
                   <img
                     key={`chip-${i}`}
@@ -82,8 +74,8 @@ export function TopNav() {
                   />
                 ))}
               </div>
-              <span className="text-sm font-bold text-white tabular-nums">
-                ×{fortuneState.chipsEarned}
+              <span className="text-base font-bold text-white tabular-nums">
+                {fortuneState.chipsEarned}
               </span>
             </div>
           </div>
