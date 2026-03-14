@@ -35,7 +35,7 @@ export function TopNav() {
         <Image className="w-full" src={asset_logo} alt="" />
       </figure>
 
-      <button onClick={handleButtonClick} className="flex gap-3 items-center">
+      <button onClick={(e) => { e.stopPropagation(); handleButtonClick() }} className="flex gap-3 items-center">
         <h1 className="text-black text-sm font-semibold">
           {address ? beautifyAddress(address, 4, "") : "Connect"}
         </h1>

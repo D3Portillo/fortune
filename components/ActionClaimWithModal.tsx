@@ -14,7 +14,7 @@ export function ActionClaimWithModal() {
   return (
     <>
       <button
-        onClick={() => setShowClaimDialog(true)}
+        onClick={(e) => { e.stopPropagation(); setShowClaimDialog(true) }}
         className="text-sm text-black/40 underline underline-offset-4 font-fortune transition-colors hover:text-black/70 active:opacity-50"
       >
         Claim now
