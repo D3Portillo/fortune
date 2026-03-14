@@ -32,11 +32,11 @@ export function AlertProvider() {
       title={state.title}
       onOpenChange={(isOpen) => setState((prev) => ({ ...prev, isOpen }))}
     >
-      <p className="text-sm">{state.description}</p>
+      <p className="text-sm text-black/60">{state.description}</p>
 
       <button
         onClick={() => setState((prev) => ({ ...prev, isOpen: false }))}
-        className="mt-7 bg-white text-black px-5 py-2 rounded-xl font-bold hover:bg-white/90 transition"
+        className="mt-7 bg-black text-white px-5 py-2 rounded-xl font-bold hover:bg-black/90 active:opacity-60 transition"
       >
         CLOSE
       </button>
