@@ -20,27 +20,37 @@ export type FortuneState = {
   date: string | null
   /** Lucky number associated with this fortune */
   luckyNumber: number
-  /** Chips earned when breaking the cookie */
-  chipsEarned: number
+  /** Lifetime total cookies earned across all sessions */
+  totalCookiesEarned: number
 }
 
-const DEFAULT_FORTUNE_STATE: FortuneState = {
+export const DEFAULT_FORTUNE_STATE: FortuneState = {
   index: null,
   date: null,
   luckyNumber: 7,
-  chipsEarned: 3,
+  totalCookiesEarned: 0,
 }
 
+export type FortuneStateMap = Record<string, FortuneState>
+
 /**
- * Persisted atom that stores the current daily fortune state.
+ * Persisted atom that stores fortune states keyed by wallet address.
  * Backed by localStorage under the key "fortune:daily".
  */
-export const dailyFortuneAtom = atomWithStorage<FortuneState>(
+export const dailyFortuneAtom = atomWithStorage<FortuneStateMap>(
   "fortune:daily",
-  DEFAULT_FORTUNE_STATE,
+  {},
   undefined,
   { getOnInit: true },
 )
+
+/** Returns the fortune state for a given address, falling back to defaults. */
+export function getFortuneState(
+  map: FortuneStateMap,
+  address: string | undefined,
+): FortuneState {
+  return address && map[address] ? map[address] : DEFAULT_FORTUNE_STATE
+}
 
 /** Derive the message from a FortuneState (returns empty string if unset). */
 export function getFortuneMessage(state: FortuneState): string {

@@ -3,19 +3,19 @@
 import { useState } from "react"
 import asset_logo from "@/assets/logo.svg"
 import Image from "next/image"
-import { useAtom } from "jotai"
 
 import { useWorldAuth } from "@radish-la/world-auth"
 import { beautifyAddress } from "@/app/lib/utils"
 import { isConnectedOrDevEnv } from "@/app/lib/env"
-import { dailyFortuneAtom } from "@/app/atoms/fortune"
+import { localizeNumber } from "@/app/lib/numbers"
+import { useFortuneState } from "@/app/hooks/useFortuneState"
 
 import AddressBlock from "./AddressBlock"
 import GameDialog from "./GameDialog"
 
 export function TopNav() {
   const { address, signIn, signOut } = useWorldAuth()
-  const [fortuneState] = useAtom(dailyFortuneAtom)
+  const [fortuneState] = useFortuneState()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const connected = isConnectedOrDevEnv(address)
@@ -41,7 +41,7 @@ export function TopNav() {
             {address ? beautifyAddress(address, 4, "") : "Connect"}
           </h1>
           <div className="text-xs -mt-0.5">
-            {address ? `1,244 Cookies` : "0 Cookies"}
+            {address ? `${localizeNumber(fortuneState.totalCookiesEarned)} Cookies` : "0 Cookies"}
           </div>
         </div>
         <div className="size-9.5 overflow-hidden rounded-xl">
@@ -82,16 +82,16 @@ export function TopNav() {
                   length: 3,
                 }).map((_, i) => (
                   <img
-                    key={`chip-${i}`}
+                    key={`cookie-${i}`}
                     src="/chips.png"
-                    alt="Cookie chip"
+                    alt="Cookie"
                     className="size-7 block"
                     style={{ zIndex: i }}
                   />
                 ))}
               </div>
               <span className="text-base font-bold text-black tabular-nums">
-                {fortuneState.chipsEarned}
+                {localizeNumber(fortuneState.totalCookiesEarned)}
               </span>
             </div>
           </div>

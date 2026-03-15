@@ -1,10 +1,11 @@
 "use client"
 
 import { cn, toChinaNumeral } from "@/app/lib/utils"
+import { localizeNumber } from "@/app/lib/numbers"
 
 type FortuneData = {
   message: string
-  chipsEarned: number
+  cookiesEarned: number
   luckyNumber: number
 }
 
@@ -19,6 +20,7 @@ export function FortuneReveal({
   isVisible,
   onBackHome,
 }: FortuneRevealProps) {
+  const { cookiesEarned } = fortuneData
   const chineseNumeral = toChinaNumeral(fortuneData.luckyNumber)
 
   return (
@@ -75,9 +77,9 @@ export function FortuneReveal({
           <div className="flex items-center gap-2">
             {/* Stacked cookie sprites */}
             <div className="flex items-center -space-x-2">
-              {Array.from({ length: fortuneData.chipsEarned }).map((_, i) => (
+              {Array.from({ length: cookiesEarned }).map((_, i) => (
                 <img
-                  key={`chip-${i}`}
+                  key={`cookie-${i}`}
                   src="/chips.png"
                   alt=""
                   className="size-7 block"
@@ -86,7 +88,7 @@ export function FortuneReveal({
               ))}
             </div>
             <span className="text-sm font-bold text-black tabular-nums">
-              ×{fortuneData.chipsEarned}
+              ×{localizeNumber(cookiesEarned)}
             </span>
           </div>
         </div>

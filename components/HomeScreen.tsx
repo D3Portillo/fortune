@@ -1,18 +1,14 @@
 "use client"
 
 import { useState, useEffect, Fragment, type PointerEvent } from "react"
-import { useAtom } from "jotai"
 import { useWorldAuth } from "@radish-la/world-auth"
 import confetti from "canvas-confetti"
 
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
+import { useFortuneState } from "@/app/hooks/useFortuneState"
 import { isConnectedOrDevEnv } from "@/app/lib/env"
 import { cn, toChinaNumeral } from "@/app/lib/utils"
-import {
-  dailyFortuneAtom,
-  getClaimDayString,
-  getFortuneMessage,
-} from "@/app/atoms/fortune"
+import { getClaimDayString, getFortuneMessage } from "@/app/atoms/fortune"
 import { pickFortuneIndex } from "@/app/lib/fortunes"
 
 import { CookieAnimation } from "./CookieAnimation"
@@ -42,14 +38,15 @@ function formatCountdown(secs: number) {
 type Stage = "idle" | "breaking" | "broken" | "reveal"
 
 const MAX_LUCKY_NUMBER = 9
-const MAX_CHIPS = 5
 
 export function HomeScreen() {
   const { address, signIn } = useWorldAuth()
   const [showCookieFlow, setShowCookieFlow] = useState(false)
   const [stage, setStage] = useState<Stage>("idle")
   const [countdown, setCountdown] = useState(getSecondsUntilNextClaimReset)
-  const [fortuneState, setFortuneState] = useAtom(dailyFortuneAtom)
+  const [cookiesEarned, setCookiesEarned] = useState(0)
+  const [fortuneState, setFortuneState] = useFortuneState()
+
   const {
     idleFrame,
     crackFrame,
@@ -65,7 +62,7 @@ export function HomeScreen() {
 
   const fortuneData = {
     message: getFortuneMessage(fortuneState),
-    chipsEarned: fortuneState.chipsEarned,
+    cookiesEarned,
     luckyNumber: fortuneState.luckyNumber,
   }
 
@@ -83,11 +80,14 @@ export function HomeScreen() {
   useEffect(() => {
     if (!showCookieFlow || stage !== "broken") return
     const newIndex = pickFortuneIndex(fortuneState.index)
+    const newCookiesEarned = Math.round(1 + Math.random() * 4)
+    setCookiesEarned(newCookiesEarned)
     setFortuneState({
       index: newIndex,
       date: getClaimDayString(),
       luckyNumber: (newIndex % MAX_LUCKY_NUMBER) + 1,
-      chipsEarned: (newIndex % MAX_CHIPS) + 1,
+      totalCookiesEarned:
+        (fortuneState.totalCookiesEarned ?? 0) + newCookiesEarned,
     })
     const timer = setTimeout(() => setStage("reveal"), 100)
     return () => clearTimeout(timer)
@@ -121,7 +121,7 @@ export function HomeScreen() {
 
   const handleClaimSuccess = () => {
     setCountdown(0)
-    setFortuneState((prev) => ({ ...prev, date: null }))
+    setFortuneState({ ...fortuneState, date: null })
     setShowCookieFlow(true)
     setStage("breaking")
     resetCrackFrame()
