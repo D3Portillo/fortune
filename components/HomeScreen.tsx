@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, Fragment } from "react"
+import { useState, useEffect, Fragment, type PointerEvent } from "react"
 import { useAtom } from "jotai"
 import { useWorldAuth } from "@radish-la/world-auth"
+import confetti from "canvas-confetti"
 
 import { useCookieAnimation } from "@/app/hooks/useCookieAnimation"
 import { isConnectedOrDevEnv } from "@/app/lib/env"
@@ -118,13 +119,48 @@ export function HomeScreen() {
     setStage("idle")
   }
 
+  const handleFortuneAreaTap = (event: PointerEvent<HTMLDivElement>) => {
+    // Don't trigger if modal open or fortune not broken (Revealed)
+    if (!hasBroken || document.querySelector("[data-scroll-locked]")) return
+
+    const origin = {
+      x: event.clientX / window.innerWidth,
+      y: event.clientY / window.innerHeight,
+    }
+
+    confetti({
+      particleCount: 12,
+      spread: 45,
+      startVelocity: 26,
+      gravity: 1.1,
+      ticks: 90,
+      scalar: 0.8,
+      origin,
+      shapes: ["square", "circle"],
+      colors: ["#fcab40", "#f0f757", "#ffd28f", "#fff4df"],
+    })
+
+    confetti({
+      particleCount: 6,
+      spread: 24,
+      startVelocity: 18,
+      gravity: 0.95,
+      ticks: 75,
+      scalar: 1,
+      origin,
+      shapes: ["square"],
+      colors: ["#fff4df", "#fcab40"],
+    })
+  }
+
   return (
     <Fragment>
       <audio ref={audioRef} src="/fortune/crack-sound.mp3" preload="auto" />
 
       <div
+        onPointerDown={hasBroken ? handleFortuneAreaTap : undefined}
         className={cn(
-          "absolute inset-0 flex flex-col",
+          "absolute select-none inset-0 flex flex-col",
           hasBroken
             ? "bg-amber-50"
             : "bg-linear-to-b from-amber-50 via-amber-100 to-amber-50",
@@ -149,7 +185,7 @@ export function HomeScreen() {
               </p>
             </div>
             {hasBroken ? (
-              <>
+              <Fragment>
                 {/* Fortune message */}
                 <div className="relative text-center mb-8">
                   <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange leading-none select-none">
@@ -177,7 +213,7 @@ export function HomeScreen() {
                     </span>
                   </div>
                 </div>
-              </>
+              </Fragment>
             ) : (
               /* Cookie + CTA */
               <button

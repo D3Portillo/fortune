@@ -21,7 +21,7 @@ export function ActionClaimWithModal() {
         title="Claim your fortune"
         actions={[
           {
-            label: "CONFIRM",
+            label: "CONFIRM (5 WLD)",
             onClick: () => {
               // TODO: handle claim logic
             },

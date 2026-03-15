@@ -36,9 +36,14 @@ export function TopNav() {
       </figure>
 
       <button onClick={handleButtonClick} className="flex gap-3 items-center">
-        <h1 className="text-black text-sm font-semibold">
-          {address ? beautifyAddress(address, 4, "") : "Connect"}
-        </h1>
+        <div className="text-black text-end">
+          <h1 className="text-sm font-semibold">
+            {address ? beautifyAddress(address, 4, "") : "Connect"}
+          </h1>
+          <div className="text-xs -mt-0.5">
+            {address ? `1,244 Cookies` : "0 Cookies"}
+          </div>
+        </div>
         <div className="size-9.5 overflow-hidden rounded-xl">
           <AddressBlock
             name={address?.replace("0x", "")}
@@ -59,7 +64,7 @@ export function TopNav() {
         <GameDialog
           open={menuOpen}
           onOpenChange={setMenuOpen}
-          title="My Cookies"
+          title="Your Portfolio"
           actions={[
             {
               label: "Disconnect",
@@ -69,8 +74,8 @@ export function TopNav() {
           ]}
         >
           {/* Cookie balance */}
-          <div className="flex items-center justify-between py-4 px-1 border-b border-black/8">
-            <span className="text-sm text-black/50">Earned</span>
+          <div className="flex items-center justify-between py-4 border-b border-black/8">
+            <span className="text-sm text-black/50">Cookies Earned</span>
             <div className="flex items-center gap-2">
               <div className="flex items-center -space-x-4">
                 {Array.from({

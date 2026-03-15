@@ -69,9 +69,9 @@ export function FortuneReveal({
 
         <div className="grow" />
 
-        {/* Chips earned */}
+        {/* Cookies earned */}
         <div className="flex items-center justify-between py-4 px-6 bg-white/60 rounded-2xl border border-of-orange/40">
-          <span className="text-sm text-black/60">Chips earned</span>
+          <span className="text-sm text-black/60">Cookies earned</span>
           <div className="flex items-center gap-2">
             {/* Stacked cookie sprites */}
             <div className="flex items-center -space-x-2">
