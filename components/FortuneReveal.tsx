@@ -36,13 +36,13 @@ export function FortuneReveal({
         {/* Fortune message */}
         <div className="relative text-center mb-14">
           <span className="absolute -rotate-12 -left-2 -top-3 text-6xl text-of-orange/20 leading-none select-none">
-            &ldquo;
+            “
           </span>
           <p className="text-2xl text-black/80 leading-relaxed px-6 font-fortune">
             {fortuneData.message}
           </p>
           <span className="absolute rotate-12 -right-2 -bottom-6 text-6xl text-of-orange/20 leading-none select-none">
-            &rdquo;
+            ”
           </span>
         </div>
 

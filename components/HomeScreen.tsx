@@ -198,13 +198,13 @@ export function HomeScreen() {
                 {/* Fortune message */}
                 <div className="relative text-center mb-8">
                   <span className="absolute -rotate-12 -left-2 -top-2 text-5xl text-of-orange leading-none select-none">
-                    &ldquo;
+                    “
                   </span>
                   <p className="text-lg text-black/70 leading-relaxed px-4 font-fortune">
                     {fortuneData.message}
                   </p>
                   <span className="absolute rotate-12 -right-2 -bottom-5 text-5xl text-of-orange leading-none select-none">
-                    &rdquo;
+                    ”
                   </span>
                 </div>
 
