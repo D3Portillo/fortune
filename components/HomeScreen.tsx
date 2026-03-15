@@ -123,9 +123,7 @@ export function HomeScreen() {
     setCountdown(0)
     setFortuneState({ ...fortuneState, date: null })
     setShowCookieFlow(true)
-    setStage("breaking")
-    resetCrackFrame()
-    audioRef.current?.play()
+    setStage("idle")
   }
 
   const handleFortuneAreaTap = (event: PointerEvent<HTMLDivElement>) => {
@@ -259,7 +257,7 @@ export function HomeScreen() {
             <div className="flex items-center justify-between px-5 py-4 bg-white/60 rounded-2xl border border-black/6">
               <div className="flex flex-col">
                 <p className="text-xs tracking-widest uppercase text-black/25 mb-0.5">
-                  MORE COOKIES IN
+                  NEXT COOKIE IN
                 </p>
 
                 <p className="font-mono text-2xl text-black/60 tabular-nums tracking-tight leading-none">
