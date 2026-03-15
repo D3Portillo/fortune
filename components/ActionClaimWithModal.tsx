@@ -20,7 +20,7 @@ export function ActionClaimWithModal({
       token: "WLD",
     })
 
-    if (txId || true) {
+    if (txId) {
       onClaimSuccess()
       setShowClaimDialog(false)
     }
