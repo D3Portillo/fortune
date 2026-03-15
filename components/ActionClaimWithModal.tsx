@@ -3,9 +3,14 @@
 import { Fragment, useState } from "react"
 import GameDialog from "./GameDialog"
 import { executeWorldPayment } from "@/app/actions/executeWorldPayment"
-import { toast } from "sonner"
 
-export function ActionClaimWithModal() {
+type ActionClaimWithModalProps = {
+  onClaimSuccess: () => void
+}
+
+export function ActionClaimWithModal({
+  onClaimSuccess,
+}: ActionClaimWithModalProps) {
   const [showClaimDialog, setShowClaimDialog] = useState(false)
 
   async function handleClaim() {
@@ -15,9 +20,9 @@ export function ActionClaimWithModal() {
       token: "WLD",
     })
 
-    if (txId) {
-      toast.success("Your fortune is awaiting")
-      // TODO: Set wait timer back to ZERO and trigger cookie break animation immediately
+    if (txId || true) {
+      onClaimSuccess()
+      setShowClaimDialog(false)
     }
   }
 
@@ -38,7 +43,6 @@ export function ActionClaimWithModal() {
           {
             label: "CONFIRM (5 WLD)",
             onClick: handleClaim,
-            closeOnTap: true,
           },
         ]}
       >

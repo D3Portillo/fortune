@@ -119,6 +119,15 @@ export function HomeScreen() {
     setStage("idle")
   }
 
+  const handleClaimSuccess = () => {
+    setCountdown(0)
+    setFortuneState((prev) => ({ ...prev, date: null }))
+    setShowCookieFlow(true)
+    setStage("breaking")
+    resetCrackFrame()
+    audioRef.current?.play()
+  }
+
   const handleFortuneAreaTap = (event: PointerEvent<HTMLDivElement>) => {
     // Don't trigger if modal open or fortune not broken (Revealed)
     if (!hasBroken || document.querySelector("[data-scroll-locked]")) return
@@ -257,7 +266,7 @@ export function HomeScreen() {
                   {formatCountdown(countdown)}
                 </p>
               </div>
-              <ActionClaimWithModal />
+              <ActionClaimWithModal onClaimSuccess={handleClaimSuccess} />
             </div>
           )}
         </div>
