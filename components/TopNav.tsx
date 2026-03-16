@@ -41,7 +41,9 @@ export function TopNav() {
             {address ? beautifyAddress(address, 4, "") : "Connect"}
           </h1>
           <div className="text-xs -mt-0.5">
-            {address ? `${localizeNumber(fortuneState.totalCookiesEarned)} Cookies` : "0 Cookies"}
+            {address
+              ? `${localizeNumber(fortuneState.totalCookiesEarned)} Cookies`
+              : "0 Cookies"}
           </div>
         </div>
         <div className="size-9.5 overflow-hidden rounded-xl">
@@ -64,7 +66,7 @@ export function TopNav() {
         <GameDialog
           open={menuOpen}
           onOpenChange={setMenuOpen}
-          title="Your Portfolio"
+          title="Manage Profile"
           actions={[
             {
               label: "Disconnect",
