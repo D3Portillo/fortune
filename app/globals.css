@@ -10,6 +10,14 @@ html {
   color: white;
 }
 
+html,
+body {
+  width: 100vw;
+  height: 100dvh;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
 button,
 a {
   cursor: pointer;

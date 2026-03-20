@@ -1,5 +1,6 @@
 import "./globals.css"
 import type { Metadata } from "next"
+import type { Viewport } from "next"
 
 import { Inter, Libre_Baskerville, Noto_Serif_SC } from "next/font/google"
 import { Toaster } from "sonner"
@@ -32,8 +33,15 @@ const china = Noto_Serif_SC({
 })
 
 export const metadata: Metadata = {
-  title: "Fortune Mini App",
-  description: "A WIP Mini App",
+  title: "One Fortune - Discover your daily fortune",
+  description:
+    "Fortune cookies on Worldchain. Tap, crack, collect wisdom, earn cookies, and climb the leaderboard for exclusive rewards and upcoming drops.",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 }
 
 export default function RootLayout({
